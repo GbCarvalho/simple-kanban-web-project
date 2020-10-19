@@ -30,6 +30,12 @@ function MainPage() {
   const [addTask, setAddTask] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
 
+  useEffect(() => {
+    api.get('tasks').then(response => {
+      setTasks(response.data);
+    });
+  }, []);
+
   function handleAddTaskCard() {
     setAddTask(true);
   }
