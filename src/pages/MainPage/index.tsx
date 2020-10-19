@@ -55,9 +55,32 @@ function MainPage() {
   }
 
   async function handleTaskStateAdd(task: Task, index: number) {
+    tasks.splice(index, 1);
+
+    if (task.state >= 3) {
+      await api.delete(`/tasks/${task.id}`);
+      setTasks([...tasks]);
+      return;
+    }
+
+    task.state += 1;
+    await api.put(`/tasks/${task.id}`, task);
+    setTasks([...tasks, task]);
   }
 
   async function handleTaskStateRemoval(task: Task, index: number) {
+    tasks.splice(index, 1);
+    task.state -= 1;
+
+    if (task.state < 1) {
+      await api.delete(`/tasks/${task.id}`);
+      setTasks([...tasks]);
+      return;
+    };
+
+    await api.put(`/tasks/${task.id}`, task);
+
+    setTasks([...tasks, task]);
   }
 
   return (
@@ -67,6 +90,27 @@ function MainPage() {
           <strong>TO DO</strong>
         </CardHeader>
         <CardContainer>
+
+          {tasks.map((task, index) => {
+            if (task.state !== 1) {
+              return;
+            }
+
+            return (
+              <Card key={task.id}>
+                <p>{task.description}</p>
+                <ButtonsContainer>
+                  <button type="button" onClick={() => handleTaskStateAdd(task, index)}>
+                    <Icon icon={nextTaskButton} style={{ fontSize: '24px' }} />
+                  </button>
+
+                  <button type="button" onClick={() => handleTaskStateRemoval(task, index)}>
+                    <Icon icon={cancelTaskButton} style={{ fontSize: '24px' }} />
+                  </button>
+                </ButtonsContainer>
+              </Card>
+            )
+          })}
 
           {addTask && (
             <CardForm onSubmit={handleAddingTask}>
@@ -95,6 +139,26 @@ function MainPage() {
         </CardHeader>
 
         <CardContainer>
+          {tasks.map((task, index) => {
+            if (task.state !== 2) {
+              return;
+            }
+
+            return (
+              <Card key={task.id}>
+                <p>{task.description}</p>
+                <ButtonsContainer confirmation>
+                  <button type="button" onClick={() => handleTaskStateAdd(task, index)}>
+                    <Icon icon={check} style={{ fontSize: '24px' }} />
+                  </button>
+
+                  <button type="button" onClick={() => handleTaskStateRemoval(task, index)}>
+                    <Icon icon={backTaskButton} style={{ fontSize: '26px' }} />
+                  </button>
+                </ButtonsContainer>
+              </Card>
+            )
+          })}
         </CardContainer>
       </Container>
 
@@ -104,6 +168,22 @@ function MainPage() {
         </CardHeader>
 
         <CardContainer>
+          {tasks.map((task, index) => {
+            if (task.state !== 3) {
+              return;
+            }
+
+            return (
+              <Card key={task.id}>
+                <p>{task.description}</p>
+                <ButtonsContainer confirmation>
+                  <button type="button" onClick={() => handleTaskStateAdd(task, index)}>
+                    <Icon icon={check} style={{ fontSize: '24px' }} />
+                  </button>
+                </ButtonsContainer>
+              </Card>
+            )
+          })}
         </CardContainer>
       </Container>
     </Page>
