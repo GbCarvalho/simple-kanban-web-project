@@ -31,12 +31,27 @@ function MainPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   function handleAddTaskCard() {
+    setAddTask(true);
   }
 
   async function handleAddingTask(event: FormEvent) {
+    event.preventDefault();
+
+    const task: Task = {
+      description,
+      state: 1,
+    }
+
+    const response = await api.post('/tasks', task);
+
+    setTasks([...tasks, response.data]);
+
+    setAddTask(false);
+    setDescription('');
   }
 
   function handleCancelTaskAdding() {
+    setAddTask(false);
   }
 
   async function handleTaskStateAdd(task: Task, index: number) {
@@ -53,6 +68,20 @@ function MainPage() {
         </CardHeader>
         <CardContainer>
 
+          {addTask && (
+            <CardForm onSubmit={handleAddingTask}>
+              <input value={description} onChange={event => setDescription(event.target.value)} placeholder='Type the card title'></input>
+              <ButtonsContainer confirmation>
+                <button type="submit">
+                  <Icon icon={add} style={{ fontSize: '24px' }} />
+                </button>
+
+                <button type="button" onClick={handleCancelTaskAdding}>
+                  <Icon icon={cancelTaskButton} style={{ fontSize: '24px' }} />
+                </button>
+              </ButtonsContainer>
+            </CardForm>
+          )}
 
           <AddCard onClick={handleAddTaskCard}>
             <Icon icon={addTaskButton} style={{ fontSize: '35px' }} />
