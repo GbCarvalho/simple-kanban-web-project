@@ -1,5 +1,18 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { shade } from 'polished';
+
+const variants = {
+  visible: {
+    opacity: 1, transition: {
+      delay: 0.3,
+      duration: 0.4,
+      when: "beforeChildren",
+      staggerChildren: 0.1
+    }
+  },
+  hidden: { opacity: 0 }
+};
 
 interface ButtonsProps {
   confirmation?: boolean;
@@ -15,7 +28,12 @@ export const Page = styled.div`
   justify-content: center;
 `
 
-export const Container = styled.div`
+export const Container = styled(motion.div).attrs(
+  () => ({
+    initial: "hidden",
+    variants,
+  })
+)`
   width: 326px;
   margin: 5px;
 `
@@ -31,7 +49,7 @@ export const CardHeader = styled.header`
   justify-content: center;
 `
 
-export const CardContainer = styled.ul`
+export const CardContainer = styled(motion.ul)`
   height: 600px;
   overflow-y: scroll;
   background-color: #EEEEEE;
@@ -44,7 +62,12 @@ export const CardContainer = styled.ul`
   flex-direction: column;
 `;
 
-export const Card = styled.li`
+export const Card = styled(motion.li).attrs(
+  () => ({
+    initial: "hidden",
+    variants,
+  })
+)`
   min-height: 64px;
   width: 300px;
   border-radius: 8px;
@@ -60,7 +83,7 @@ export const Card = styled.li`
   }
 `
 
-export const AddCard = styled.label`
+export const AddCard = styled(motion.label)`
   min-height: 64px;
   width: 300px;
   border-radius: 8px;
@@ -114,7 +137,7 @@ export const ButtonsContainer = styled.div`
   }
 `
 
-export const CardForm = styled.form`
+export const CardForm = styled(motion.form)`
   min-height: 64px;
   width: 300px;
   border-radius: 8px;
@@ -126,10 +149,17 @@ export const CardForm = styled.form`
   justify-content: space-between;
 
   input {
+    background-color: #FCFCFC;
+    color: #425065;
     position: relative;
+    padding-left: 8px;
     margin: 14px;
     border: none;
     width: 100%;
+  }
+
+  input::placeholder {
+    color: #7e8187;
   }
 
 `

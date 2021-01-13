@@ -33,7 +33,9 @@ function MainPage() {
   useEffect(() => {
     api.get('tasks').then(response => {
       setTasks(response.data);
+      console.log(response.data);
     });
+
   }, []);
 
   function handleAddTaskCard() {
@@ -58,6 +60,7 @@ function MainPage() {
 
   function handleCancelTaskAdding() {
     setAddTask(false);
+    setDescription('');
   }
 
   async function handleTaskStateAdd(task: Task, index: number) {
@@ -91,7 +94,7 @@ function MainPage() {
 
   return (
     <Page>
-      <Container>
+      <Container animate='visible'>
         <CardHeader>
           <strong>TO DO</strong>
         </CardHeader>
@@ -103,7 +106,7 @@ function MainPage() {
             }
 
             return (
-              <Card key={task.id}>
+              <Card key={task.id} animate='visible'>
                 <p>{task.description}</p>
                 <ButtonsContainer>
                   <button type="button" onClick={() => handleTaskStateAdd(task, index)}>
@@ -139,7 +142,7 @@ function MainPage() {
         </CardContainer>
       </Container>
 
-      <Container>
+      <Container animate='visible'>
         <CardHeader>
           <strong>DOING</strong>
         </CardHeader>
@@ -151,7 +154,7 @@ function MainPage() {
             }
 
             return (
-              <Card key={task.id}>
+              <Card key={task.id} animate='visible'>
                 <p>{task.description}</p>
                 <ButtonsContainer confirmation>
                   <button type="button" onClick={() => handleTaskStateAdd(task, index)}>
@@ -168,7 +171,7 @@ function MainPage() {
         </CardContainer>
       </Container>
 
-      <Container>
+      <Container animate='visible'>
         <CardHeader>
           <strong>DONE</strong>
         </CardHeader>
@@ -180,7 +183,7 @@ function MainPage() {
             }
 
             return (
-              <Card key={task.id}>
+              <Card key={task.id} animate='visible'>
                 <p>{task.description}</p>
                 <ButtonsContainer confirmation>
                   <button type="button" onClick={() => handleTaskStateAdd(task, index)}>
